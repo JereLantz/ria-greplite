@@ -1,6 +1,8 @@
+use regex::Regex;
+
 fn main() {
-    let ctx_lines = 2;
-    let search_term = "oo";
+    let re = Regex::new("ev").unwrap();
+    let ctx_lines = 0;
     let quote = "\
  Every face, every shop,
  bedroom window, public-house, and
@@ -16,11 +18,14 @@ fn main() {
     let mut ctx: Vec<Vec<(usize, String)>> = vec![];
 
     for (i, line) in quote.lines().enumerate() {
-        if line.contains(search_term){
-            tags.push(i);
-
-            let v = Vec::with_capacity(2*ctx_lines + 1);
-            ctx.push(v);
+        let contains_substring = re.find(line);
+        match contains_substring {
+            Some(_) => {
+                tags.push(i);
+                let v = Vec::with_capacity(2*ctx_lines + 1);
+                ctx.push(v);
+            },
+            None => (),
         }
     }
 
